@@ -1,7 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { Routes } from "@config/routes";
 import { color, textFont } from "@styles/theme";
 import Link from "next/link";
+import { ModalDialog } from "@features/layout";
+import MailIcon from "public/icons/mail.svg";
 
 const Header = styled.header`
   width: 100%;
@@ -62,8 +65,35 @@ const ContactButton = styled.button`
 `;
 
 const IssuesPage = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div>
+      {showModal && (
+        <ModalDialog
+          image={MailIcon}
+          title="Contact Us Via Email"
+          body="Any questions? Send us an email at prolog@profy.dev. We usually answer within 24 hours."
+          buttons={[
+            {
+              key: "cancel",
+              text: "Cancel",
+              onClick: () => setShowModal(false),
+              highlighted: false,
+            },
+            {
+              key: "ok",
+              text: "Open Email App",
+              onClick: () => {
+                setShowModal(false);
+                window.open("mailto:silviomori@gmail.com");
+              },
+              highlighted: true,
+            },
+          ]}
+        />
+      )}
+
       <Header>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/logo-large.svg" alt="Prolog logo" />
@@ -87,13 +117,8 @@ const IssuesPage = () => {
           <Link href={Routes.projects}>Open Dashboard</Link>
         </DashboardButton>
       </Header>
-      <ContactButton
-        onClick={() =>
-          alert(
-            "Implement this in Challenge 2 - Modal:\n\nhttps://profy.dev/rjs-challenge-modal"
-          )
-        }
-      >
+
+      <ContactButton onClick={() => setShowModal(true)}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/message.svg" alt="Contact" />
       </ContactButton>
